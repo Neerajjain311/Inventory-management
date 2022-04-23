@@ -38,6 +38,19 @@ class Order(HashModel):
     class Meta:
         database = redis
 
+# GET all order ids
+@app.get('/orders')
+def get_all():
+    return [format(pk) for pk in Order.all_pks()]
+
+def format(pk: str):
+    order = Order.get(pk)
+    return {
+        "id": order.pk,
+        "price": order.price,
+        "status": order.status
+    } 
+
 
 # GET specific order details
 @app.get("/orders/{pk}")
